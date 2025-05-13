@@ -15,6 +15,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404,redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_GET, require_POST
 
 
 
@@ -92,42 +93,42 @@ def product_detail(request, product_id):
 
 
 
-
-
+@require_POST
 def add_to_cart(request, product_id):
     if not request.user.is_authenticated:
-       return JsonResponse({"error": "Login is required to add items to the cart."}, status=401)
+        return JsonResponse(
+            {"error": "Login is required to add items to the cart."},
+            status=403
+        )
 
-    if request.method == "POST":
-        try:
-            product = Product.objects.get(id=product_id)  # Fetch the product
-            user = request.user  # Get the logged-in user
-            
-            # Check if the product is already in the cart
-            cart_item, created = ShoppingCart.objects.get_or_create(
-                user=user, product=product,shipping_fee=product.shipping_fee,
-                defaults={'quantity': 1}
-            )
-            if not created:
-                # If the item exists, increase the quantity
-                cart_item.quantity += 1
-                cart_item.save()
-            
-            return JsonResponse({"message": "Product added to cart successfully!"}, status=200)
-        
-        except Product.DoesNotExist:
-            return JsonResponse({"error": "Product not found."}, status=404)
-    return JsonResponse({"error": "Invalid request method."}, status=400)
+    try:
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        return JsonResponse({"error": "Product not found."}, status=404)
+
+    user = request.user
+    cart_item, created = ShoppingCart.objects.get_or_create(
+        user=user,
+        product=product,
+        shipping_fee=product.shipping_fee,
+        defaults={'quantity': 1}
+    )
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+
+    return JsonResponse({"message": "Product added to cart successfully!"})
 
 
-@login_required(login_url='authenticate')
+# 2) Cart-count view: NO @login_required, always returns JSON
+@require_GET
 def get_cart_count(request):
     if request.user.is_authenticated:
-        cart_count = ShoppingCart.objects.filter(user=request.user).count()  # Get the number of items in the cart
-        return JsonResponse({"cart_count": cart_count})
+        count = ShoppingCart.objects.filter(user=request.user).count()
     else:
-        return JsonResponse({"cart_count": 0})
+        count = 0
 
+    return JsonResponse({"count": count})
 
 
 
