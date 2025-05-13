@@ -4,9 +4,6 @@
 {% url 'terms_condition' as terms_url %}
 {% url 'contact' as contact_url %}
 {% url 'myorders' as orders_url %}
-
-
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -49,39 +46,7 @@
     <!-- Toastify CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-    <!-- Schema.org Organization Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "NICO WHOLESALE COMPUTERS LTD",
-        "url": "https://nicocomputers.com",
-        "logo": "https://nicocomputers.com{% static 'assets/logo/nico_logo.png' %}",
-        "founder": "Nicolas Leatham",
-        "address": [
-            {
-                "@type": "PostalAddress",
-                "streetAddress": "5a Lewes Road",
-                "addressLocality": "Brighton",
-                "addressRegion": "England",
-                "postalCode": "BN2 3HP",
-                "addressCountry": "United Kingdom"
-            },
-            {
-                "@type": "PostalAddress",
-                "streetAddress": "Apartment 16, Block 1, Richmond Hall, Richmond Road, Fairview",
-                "addressLocality": "Dublin 3",
-                "postalCode": "D03 E674",
-                "addressCountry": "Ireland"
-            }
-        ],
-        "contactPoint": [{
-            "@type": "ContactPoint",
-            "contactType": "customer service",
-            "telephone": "+44-XXX-XXX-XXXX"
-        }]
-    }
-    </script>
+   
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="{% static 'assets/vendor/line-awesome/line-awesome/line-awesome.min.css' %}">
@@ -122,7 +87,7 @@
                 <nav class="mobile-nav">
                     <ul class="mobile-menu">
                         <li class="active"><a href="{% url 'home' %}">Home</a></li>
-                        <li><a href="{% url 'terms_condition' %}">About</a></li>
+                        <li><a href="{% url 'about_us' %}">About</a></li>
                         <li><a href="{% url 'refund_policy' %}">Refund Policy</a></li>
                         <li><a href="{% url 'category_products' 'ultrabook' %}">Ultrabooks</a></li>
                         <li><a href="{% url 'category_products' 'gaming' %}">Gaming Laptops</a></li>
