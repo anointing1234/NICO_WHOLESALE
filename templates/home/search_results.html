@@ -5,7 +5,11 @@
 {% block contents %}
 
 <main class="main">
-    <div class="page-header text-center" style="background-color:black;">
+    <div class="page-header text-center"  style="      background-image: url('{% static 'assets/images/backgrounds/contact.webp' %}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+">
         <div class="container">
             <h1 class="page-title text-white"> Search Results for "{{ search_query }}" </h1>
         </div><!-- End .container -->
@@ -74,7 +78,7 @@
                                       
                                         <h3 class="product-title"><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3><!-- End .product-title -->
                                         <div class="product-price">
-                                           €{{ product.price }}
+                                           &pound;{{ product.price }}
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="" style="display: flex; gap: 2px;">

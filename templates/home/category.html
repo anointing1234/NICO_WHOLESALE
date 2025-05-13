@@ -4,7 +4,11 @@
 {% block contents %}
 
 <main class="main">
-    <div class="page-header text-center" style="background-color:black;">
+    <div class="page-header text-center"  style="      background-image: url('{% static 'assets/images/backgrounds/contact.webp' %}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+">
         <div class="container">
             <h1 class="page-title text-white">{{ category_label }}</h1>
         </div><!-- End .container -->
@@ -67,7 +71,7 @@
 
                                     <div class="product-body">
                                         <h3 class="product-title"><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
-                                        <div class="product-price">€{{ product.price }}</div>
+                                        <div class="product-price">&pound;{{ product.price }}</div>
                                         <div class="ratings-container">
                                             <div class="" style="display: flex; gap: 2px;">
                                                 {% for i in "12345"|make_list %}

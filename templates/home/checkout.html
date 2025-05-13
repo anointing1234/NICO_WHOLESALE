@@ -4,7 +4,11 @@
 {% block contents %}
 
         <main class="main">
-        	<div class="page-header text-center" style="background-image: url('{% static 'assets/images/page-header-bg.jpg' %}')">
+        	<div class="page-header text-center"  style="      background-image: url('{% static 'assets/images/backgrounds/contact.webp' %}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+">
         		<div class="container">
         			<h1 class="page-title">Checkout<span></span></h1>
         		</div><!-- End .container -->
@@ -80,16 +84,16 @@
                                                 {% for item in cart_items %}
 		                						<tr>
 		                							<td><a href="#">{{ item.product.name|upper }} × {{ item.quantity }}</a></td>
-		                							<td>€{{ item.total_price|floatformat:2|intcomma }}</td>
+		                							<td>&pound;{{ item.total_price|floatformat:2|intcomma }}</td>
 		                						</tr>
                                                 {% endfor %}
 		                						<tr>
 		                							<td>Shipping fee:</td>
-		                							<td>€{{ shipping_fee|floatformat:2|intcomma }}</td>
+		                							<td>&pound;{{ shipping_fee|floatformat:2|intcomma }}</td>
 		                						</tr>
 		                						<tr class="summary-total">
 		                							<td>Total:</td>
-		                							<td>€{{ total_with_shipping|floatformat:2|intcomma  }}</td>
+		                							<td>&pound;{{ total_with_shipping|floatformat:2|intcomma  }}</td>
 		                						</tr><!-- End .summary-total -->
 		                					</tbody>
 		                				</table><!-- End .table table-summary -->

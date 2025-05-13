@@ -44,7 +44,7 @@ def home_view(request):
         'bestsellers':         bestsellers,
         'popular_categories':  popular_categories,
         'new_arrivals':        new_arrivals,
-        'top_rated':           top_rated,
+        'Top_rated':           top_rated,
         'on_sale':             on_sale,
 
         # All

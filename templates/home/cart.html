@@ -41,7 +41,11 @@
   
 
         <main class="main">
-        	<div class="page-header text-center" style="background-color:black;">
+        	<div class="page-header text-center"  style="      background-image: url('{% static 'assets/images/backgrounds/contact.webp' %}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+">
         		<div class="container">
         			<h1 class="page-title text-white">Shopping Cart</h1>
         		</div><!-- End .container -->
@@ -88,7 +92,7 @@
                             </div>
                         </td>
                         <td class="price-col">
-                           €{{ item.product.price|floatformat:2|intcomma }}
+                           &pound;{{ item.product.price|floatformat:2|intcomma }}
                         </td>
                         <td class="quantity-col" data-title="Quantity">
                             <div class="cart-product-quantity">
@@ -112,7 +116,7 @@
                             </div>
                         </td>
                         <td class="total-col" data-title="Total" id="total-{{ item.id }}">
-                           €{{ item.total_price|floatformat:2|intcomma }}
+                           &pound;{{ item.total_price|floatformat:2|intcomma }}
                         </td>
                         <td class="remove-col">
                             <button class="btn-remove remove-item" data-item-id="{{ item.id }}">
@@ -131,11 +135,11 @@
                     <tbody>
                         <tr class="summary-subtotal">
                             <td>Shipping fee:</td>
-                            <td>€{{ shipping_total|floatformat:2|intcomma }}</td>
+                            <td>&pound;{{ shipping_total|floatformat:2|intcomma }}</td>
                         </tr>
                         <tr class="summary-total">
                             <td>Total:</td>
-                            <td>€{{ total|floatformat:2|intcomma }}</td>
+                            <td>&pound;{{ total|floatformat:2|intcomma }}</td>
                         </tr>
                     </tbody>
                 </table>
