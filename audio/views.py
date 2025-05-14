@@ -389,6 +389,38 @@ def myorders(request):
 
 
 
+
+@login_required(login_url='authenticate')
+def view_order(request, order_id):
+    # Fetch exactly that one order (and ensure it belongs to this user)
+    order = get_object_or_404(
+        Order,
+        order_id=order_id,
+        user=request.user
+    )
+
+    # Put it in a list so your template can iterate over `orders` just like in myorders
+    orders = [order]
+
+    # Run the same JSON‑parsing logic you have in myorders
+    for o in orders:
+        try:
+            o.product_details_parsed = (
+                json.loads(o.product_details)
+                    .get('products', [])
+            )
+        except json.JSONDecodeError:
+            o.product_details_parsed = []
+
+    return render(request, 'home/my_orders.html', {
+        'orders': orders,
+    })
+
+
+                    
+
+
+
 def about_us_view(request):
     return render(request,'home/about.html')
 
