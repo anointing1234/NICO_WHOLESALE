@@ -137,26 +137,25 @@
 
 
 
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Function to fetch the cart count
-        function updateCartCount() {
-            fetch("{% url 'get_cart_count' %}")  // Replace 'get_cart_count' with your actual URL name
-                .then(response => response.json())
-                .then(data => {
-                    const cartCountElement = document.getElementById("cart-count1");
-                    if (cartCountElement) {
-                        cartCountElement.textContent = data.cart_count; // Update the cart count
-                    }
-                })
-                .catch(error => console.error("Error fetching cart count:", error));
-        }
+document.addEventListener("DOMContentLoaded", function () {
+    // Function to fetch the cart count
+    function updateCartCount() {
+        fetch("{% url 'get_cart_count' %}")
+            .then(response => response.json())
+            .then(data => {
+                const cartCountElement = document.getElementById("cart-count1");
+                if (cartCountElement) {
+                    cartCountElement.textContent = data.count; // Update the cart count
+                }
+            })
+            .catch(error => console.error("Error fetching cart count:", error));
+    }
 
-        // Call updateCartCount on page load
-        updateCartCount();
-
-        // Optionally, re-fetch cart count at intervals or trigger it on specific actions
-    });
+    // Call updateCartCount on page load
+    updateCartCount();
+});
 
 </script>
 
