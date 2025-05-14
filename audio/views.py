@@ -298,67 +298,65 @@ def get_bank_details(request):
 
 @login_required(login_url='authenticate')
 def create_order(request):
-    if request.method == "POST":
-        try:
-            # Parse the request body
-            data = json.loads(request.body)
+    if request.method != "POST":
+        return JsonResponse({"success": False, "error": "Invalid request method."}, status=405)
 
-            billing_details = data.get("billingDetails")
-            cart_details = data.get("cartDetails")
+    try:
+        data = json.loads(request.body)
 
-            # Validate data
-            if not billing_details or not cart_details:
-                return JsonResponse({"success": False, "error": "Invalid request data."}, status=400)
+        billing_details = data.get("billingDetails")
+        cart_details = data.get("cartDetails")
+        
+        
+        if not billing_details or not cart_details or "products" not in cart_details:
+            return JsonResponse({"success": False, "error": "Missing billing or cart details."}, status=400)
 
-            # Create a list to hold order IDs for the response
-            order_ids = []
+        shipping_fee = float(cart_details.get("shipping_fee", 0.0))
+        order_ids = []
 
-            # Iterate over each product in the cart
-            for product in cart_details["products"]:
-                # Calculate total price for the individual product order
-                total_price = float(product["quantity"]) * float(product["price"])
+        for product in cart_details["products"]:
+            try:
+                product_id = int(product["id"])
+                quantity = int(product["quantity"])
+                price = float(product["price"])
+                total_price = quantity * price + shipping_fee
 
-                # Calculate shipping fee (this is a placeholder; adjust as needed)
-                shipping_fee = cart_details.get("shipping_fee", 0.0)  # Ensure this is set correctly
-
-                # Create a new order instance for each product
+                print(total_price)
                 order = Order(
                     user=request.user,
-                    street_address=billing_details["street_address"],
-                    city=billing_details["city"],
-                    state=billing_details["state"],
-                    postcode=billing_details["postcode"],
-                    email=billing_details["email"],
-                    phone=billing_details["phone"],
-                    product_details=json.dumps({"products": [product]}),  # Store only the current product
+                    street_address=billing_details.get("street_address", ""),
+                    city=billing_details.get("city", ""),
+                    state=billing_details.get("state", ""),
+                    postcode=billing_details.get("postcode", ""),
+                    email=billing_details.get("email", ""),
+                    phone=billing_details.get("phone", ""),
+                    product_details=json.dumps({"products": [product]}),
                     total_price=total_price,
                     shipping_fee=shipping_fee,
                 )
 
-                # Assign an image to the order from the product
-                product_id = product["id"]
-                try:
-                    product_instance = Product.objects.get(id=product_id)
-                    if product_instance.image:
-                        order.order_image = product_instance.image  # Assign product's image to order_image
-                except Product.DoesNotExist:
-                    pass  # Handle the case where the product does not exist
+                # Attach product image if available
+                product_instance = Product.objects.filter(id=product_id).first()
+                if product_instance and product_instance.image:
+                    order.order_image = product_instance.image
 
-                # Save the order instance
                 order.save()
-                order_ids.append(order.id)  # Store the order ID for the response
+                order_ids.append(order.order_id)  # Store `order_id`, not `id` for better frontend use
 
-            # Clear the shopping cart for the user
-            ShoppingCart.objects.filter(user=request.user).delete()
+            except (ValueError, TypeError, KeyError) as e:
+                return JsonResponse({"success": False, "error": f"Invalid product data: {e}"}, status=400)
 
-            return JsonResponse({"success": True, "order_ids": order_ids})
+        # Clear the cart
+        ShoppingCart.objects.filter(user=request.user).delete()
 
-        except json.JSONDecodeError:
-            return JsonResponse({"success": False, "error": "Invalid JSON format."}, status=400)
-        except Exception as e:
-            return JsonResponse({"success": False, "error": str(e)}, status=500)
+        return JsonResponse({"success": True, "order_ids": order_ids})
 
-    return JsonResponse({"success": False, "error": "Invalid request method."}, status=405)
+    except json.JSONDecodeError:
+        return JsonResponse({"success": False, "error": "Invalid JSON format."}, status=400)
+
+    except Exception as e:
+        return JsonResponse({"success": False, "error": str(e)}, status=500)
+
 
 
 
